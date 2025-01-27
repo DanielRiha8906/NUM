@@ -1,0 +1,17 @@
+gauss_elimination <- function(A, b) {
+  n <- nrow(A)
+  # Forward elimination
+  for (k in 1:(n - 1)) {
+    for (i in (k + 1):n) {
+      factor <- A[i, k] / A[k, k]
+      A[i, k:n] <- A[i, k:n] - factor * A[k, k:n]
+      b[i] <- b[i] - factor * b[k]
+    }
+  }
+  # Back substitution
+  x <- numeric(n)
+  for (i in n:1) {
+    x[i] <- (b[i] - sum(A[i, (i + 1):n] * x[(i + 1):n])) / A[i, i]
+  }
+  return(x)
+}

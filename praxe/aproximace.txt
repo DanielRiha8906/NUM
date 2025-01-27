@@ -1,0 +1,8 @@
+least_squares <- function(x, y) {
+  n <- length(x)
+  X <- cbind(1, x)  # Design matrix for linear fit
+  beta <- solve(t(X) %*% X) %*% t(X) %*% y  # Coefficients
+  fitted <- X %*% beta
+  mse <- mean((y - fitted)^2)
+  return(list(coefficients = beta, mse = mse))
+}

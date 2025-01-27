@@ -1,0 +1,56 @@
+### **As if you know nothing about numerical computing:**
+
+Imagine you're trying to fit a straight line through a bunch of dots on a graph. These dots might represent data you’ve collected, like how fast a car is moving at different times.
+
+The **least squares method** is like drawing a line that gets as close as possible to all those dots. Instead of eyeballing it, the method uses a rule: 
+
+1. For each dot, it measures how far it is from the line (up or down).
+2. It squares those distances (to make sure negative distances don’t cancel positive ones).
+3. Then, it adds up all those squared distances to get a total "error."
+4. The method finds the line where this total error is as small as possible.
+
+In short, it’s a way to draw the "best" line through the dots by minimizing the total error.
+
+---
+
+### **As an expert:**
+
+The **least squares method** is a mathematical optimization technique used to approximate the solution of overdetermined systems (where there are more equations than unknowns), typically in the context of data fitting.
+
+#### Core Idea:
+The method minimizes the **sum of squared residuals** between observed values (\(y_i\)) and values predicted by the model (\(\hat{y}_i\)).
+
+#### Process:
+1. **Model Setup:**
+   - Assume a model: \( y = X\beta + \epsilon \), where:
+     - \(y\): Vector of observed values.
+     - \(X\): Design matrix containing predictor variables.
+     - \(\beta\): Vector of coefficients (parameters) to estimate.
+     - \(\epsilon\): Vector of errors (residuals).
+
+2. **Objective:**
+   - Minimize the residual sum of squares (RSS): 
+     \[
+     RSS = \sum_{i=1}^n (y_i - \hat{y}_i)^2 = \|y - X\beta\|^2
+     \]
+
+3. **Solution:**
+   - Using calculus, the solution is derived by setting the derivative of RSS with respect to \(\beta\) to zero, leading to the **normal equations**:
+     \[
+     X^T X \beta = X^T y
+     \]
+   - The optimal \(\beta\) is given by:
+     \[
+     \beta = (X^T X)^{-1} X^T y
+     \]
+
+#### Key Properties:
+- Assumes the errors \(\epsilon\) are normally distributed with constant variance (\( \sigma^2 \)).
+- Efficient and widely used for linear regression and polynomial fitting.
+
+#### Applications:
+- Data fitting (e.g., finding trends in experimental data).
+- Predictive modeling.
+- Calibration of instruments.
+
+In summary, the least squares method transforms a complex fitting problem into a solvable linear algebra problem, ensuring an optimal fit by minimizing the squared differences between observed and predicted values.

@@ -1,0 +1,5 @@
+
+midpointrule <- function(f,a,b, n=1e6){
+    h <- (b-a)/n
+    return(h*sum(f(a+h*(1:n)-h/2)))
+}

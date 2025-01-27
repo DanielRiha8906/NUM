@@ -1,0 +1,86 @@
+### **As if you know nothing about numerical computing:**
+
+Imagine you're tracking something that changes over time, like the position of a car or the temperature of water as it heats up. You know the rules for how it changes (a formula or equation), but you don’t want to calculate the exact answer—maybe because it’s too hard.
+
+The **Euler method** helps you estimate what happens step by step:
+1. Start at the beginning (\(t_0\)) with a known starting value (\(y_0\)).
+2. Take a small step forward in time (\(h\)) and use the rules (the equation) to figure out how much the value changes.
+3. Update the value based on this change.
+4. Repeat for the next step and keep going until you reach the end (\(t_n\)).
+
+It’s like following directions one step at a time instead of trying to jump directly to the answer.
+
+---
+
+### **As an expert:**
+
+The **Euler method** is a first-order numerical technique for solving ordinary differential equations (ODEs) of the form:
+\[
+\frac{dy}{dt} = f(t, y), \quad y(t_0) = y_0
+\]
+
+#### **Algorithm:**
+1. Start with the initial condition \((t_0, y_0)\).
+2. Divide the interval \([t_0, t_n]\) into equal steps of size \(h\):
+   \[
+   t_i = t_0 + i \cdot h, \quad i = 0, 1, \dots, N
+   \]
+   where \(N = \frac{t_n - t_0}{h}\).
+3. Approximate \(y(t_{i+1})\) using:
+   \[
+   y_{i+1} = y_i + h \cdot f(t_i, y_i)
+   \]
+   Here, \(f(t_i, y_i)\) is the slope (rate of change) at the point \((t_i, y_i)\).
+
+4. Repeat until \(t = t_n\).
+
+#### **Key Properties:**
+- **Order:** First-order method (error \(O(h)\)).
+- **Stability:** Sensitive to the step size \(h\); smaller \(h\) improves accuracy but increases computational cost.
+
+---
+
+### **Explanation of Your Function:**
+
+```R
+euler_method <- function(f, y0, t0, tn, h) {
+  t <- seq(t0, tn, by = h)  # Create time steps
+  y <- numeric(length(t))   # Initialize solution vector
+  y[1] <- y0                # Set initial condition
+  for (i in 1:(length(t) - 1)) {  # Iterate over steps
+    y[i + 1] <- y[i] + h * f(t[i], y[i])  # Euler formula
+  }
+  return(data.frame(t = t, y = y))  # Return results
+}
+```
+
+- **Inputs:**
+  - \(f\): The function defining the ODE \(\frac{dy}{dt} = f(t, y)\).
+  - \(y_0\): The initial value at \(t_0\).
+  - \(t_0\), \(t_n\): The start and end times for the solution.
+  - \(h\): The step size for the approximation.
+
+- **Outputs:**
+  - A data frame containing:
+    - \(t\): The time points.
+    - \(y\): The corresponding approximate solution values.
+
+---
+
+### **Advantages:**
+- Simple and easy to implement.
+- Provides a quick approximation for ODE solutions.
+
+### **Disadvantages:**
+- Accuracy is limited due to the first-order error \(O(h)\).
+- Sensitive to the choice of \(h\); too large a step size can lead to instability or inaccurate results.
+
+---
+
+### **Applications:**
+- Solving initial value problems in physics, engineering, and biology, where analytical solutions are difficult or impossible to find.
+- Modeling dynamic systems like population growth, chemical reactions, or mechanical vibrations.
+
+---
+
+In summary, the **Euler method** approximates the solution of ODEs step by step, using the slope of the curve at each point to predict the next value. It’s straightforward but requires careful attention to step size for accurate and stable results.

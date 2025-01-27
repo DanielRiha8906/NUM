@@ -1,0 +1,6 @@
+Řešení nelineárních rovnic -> metoda půlení intervalu
+řešení soustav lineárních rovnic -> GEM
+interpolace -> Lagrange
+Aproximace -> MSE
+Numerické derivování a integrace -> Newton Cotes
+numerické řešení obyčejných diferenciálních orvnic -> Eulerova metoda.

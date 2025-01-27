@@ -1,0 +1,59 @@
+### **As if you know nothing about numerical computing:**
+
+Imagine you’re trying to measure the area under a curve (like the ground under a hill on a graph). To do this:
+
+1. Split the ground into small strips (subintervals).
+2. Instead of trying to measure the exact area of each strip, you look at the **middle point** of the strip.
+3. Measure the height of the curve at that middle point and assume it represents the whole strip’s height.
+4. Multiply that height by the width of the strip to estimate the area for that strip.
+5. Add up all these estimated areas for all the strips, and you’ll get an approximate total area under the curve.
+
+This is what the **midpoint rule** does: it estimates the total area under a curve by using the midpoint of small sections to calculate the area of each strip.
+
+---
+
+### **As an expert:**
+
+The **midpoint rule** is a numerical integration technique that approximates the value of a definite integral \( \int_a^b f(x) \, dx \). It is based on using the **midpoint** of each subinterval in a partition to estimate the integral.
+
+#### Core Idea:
+1. Divide the interval \([a, b]\) into \(n\) subintervals of equal width:
+   \[
+   h = \frac{b - a}{n}
+   \]
+2. Identify the midpoints of each subinterval:
+   \[
+   x_i^* = a + \left(i - \frac{1}{2}\right)h \quad \text{for } i = 1, 2, \dots, n
+   \]
+3. Evaluate the function \(f(x)\) at these midpoints \(x_i^*\).
+4. Approximate the integral as:
+   \[
+   \int_a^b f(x) \, dx \approx h \sum_{i=1}^n f(x_i^*)
+   \]
+
+---
+
+### **Derivation:**
+The midpoint rule approximates the integral using the Riemann sum, but instead of evaluating \(f(x)\) at the left or right endpoints of the subintervals, it uses the midpoint:
+\[
+\int_a^b f(x) dx \approx \sum_{i=1}^n f\left(a + \left(i - \frac{1}{2}\right)h\right) h
+\]
+This choice reduces the error in the approximation for smooth functions.
+
+---
+
+### **Error Analysis:**
+The error in the midpoint rule is proportional to the second derivative of \(f(x)\) and inversely proportional to \(n^2\):
+\[
+\text{Error} = -\frac{(b - a)^3}{24n^2} f''(\xi) \quad \text{for some } \xi \in [a, b]
+\]
+This makes the midpoint rule more accurate than the rectangular rule and sometimes comparable to the trapezoidal rule.
+
+---
+
+### **Applications:**
+- Estimating areas under curves.
+- Solving physical problems involving integrals (e.g., finding distances from velocity data).
+- Often used when simplicity is required or function evaluations at midpoints are computationally efficient.
+
+In summary, the **midpoint rule** provides a straightforward, yet effective, method for numerical integration by leveraging midpoint evaluations to better approximate the curve's behavior over each subinterval.

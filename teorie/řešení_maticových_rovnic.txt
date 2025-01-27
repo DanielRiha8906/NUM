@@ -1,0 +1,91 @@
+### **As if you are a complete beginner in numerical computing:**
+
+Imagine you have a system of equations to solve, like:
+1. \(2x + y = 5\)
+2. \(x - y = 1\)
+
+You want to figure out the values of \(x\) and \(y\). The **Gaussian Elimination Method (GEM)** helps you systematically "clean up" the equations so they’re easier to solve, step by step.
+
+Now, sometimes you run into a problem: the numbers in the equations might make the method unstable or hard to calculate (like dividing by something very close to zero). To avoid this, we use **pivoting**, which means we rearrange the equations (swap rows) to make the calculations easier and more accurate.
+
+Here’s how GEM with pivoting works:
+1. Look at the first column and find the biggest number in it. Swap that row with the first row.
+2. Use the first equation (now at the top) to simplify all the equations below it.
+3. Move to the second column and repeat: find the biggest number in the column, swap rows if needed, and simplify the equations below.
+4. Keep going until the system is in a neat "triangular" form where each equation involves fewer variables than the one before it.
+5. Finally, solve the equations from the bottom up.
+
+Pivoting makes sure you’re always working with the largest numbers available, which reduces errors and makes the process more stable.
+
+---
+
+### **As an expert in numerical computing:**
+
+Gaussian Elimination with partial pivoting is a numerical method to solve a system of linear equations \(A \cdot x = b\). It involves transforming the coefficient matrix \(A\) into an upper triangular form using row operations, while ensuring numerical stability by reordering rows based on the magnitude of pivot elements.
+
+---
+
+#### **Key Steps:**
+
+1. **Pivot Selection (Partial Pivoting):**
+   - At each step \(k\), identify the row \(i \geq k\) where the absolute value of the pivot element \(A[i, k]\) is largest.
+   - Swap the current row \(k\) with row \(i\) to maximize the magnitude of the pivot. This minimizes numerical errors caused by division by small pivot values.
+
+2. **Forward Elimination:**
+   - For each row \(i > k\), compute the elimination factor:
+     \[
+     \text{factor} = \frac{A[i, k]}{A[k, k]}
+     \]
+   - Subtract \( \text{factor} \times \text{row } k \) from row \(i\) to eliminate the \(k\)-th variable from row \(i\).
+
+3. **Back Substitution:**
+   - Once \(A\) is in upper triangular form (\(U\)), solve the system \(U \cdot x = b'\) by substituting from the bottom up.
+
+---
+
+#### **Mathematical Representation:**
+
+1. **Pivoting:**
+   Rearrange \(A\) using a permutation matrix \(P\):
+   \[
+   P \cdot A \cdot x = P \cdot b
+   \]
+
+2. **Forward Elimination:**
+   Transform \(P \cdot A\) into an upper triangular matrix \(U\), with multipliers stored in \(L\):
+   \[
+   L \cdot U = P \cdot A
+   \]
+
+3. **Solution:**
+   Solve the triangular systems:
+   \[
+   L \cdot y = P \cdot b \quad \text{(forward substitution)}
+   \]
+   \[
+   U \cdot x = y \quad \text{(back substitution)}
+   \]
+
+---
+
+#### **Why Pivoting?**
+
+- Ensures numerical stability by avoiding division by small pivot elements.
+- Reduces rounding errors in finite-precision arithmetic.
+
+---
+
+#### **Comparison with No Pivoting:**
+
+- Without pivoting, GEM may fail for certain matrices (e.g., with a zero pivot element).
+- Pivoting increases computational cost slightly but guarantees robustness and accuracy.
+
+---
+
+### **Applications:**
+
+- Solving linear systems in engineering and physics.
+- Preconditioning for iterative methods.
+- Basis for advanced techniques like LU decomposition.
+
+In summary, GEM with pivoting is a robust way to solve linear systems, balancing computational efficiency and numerical stability by dynamically rearranging rows based on pivot magnitudes.

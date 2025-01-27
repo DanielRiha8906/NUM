@@ -1,0 +1,60 @@
+### **As if you know nothing about numerical computing:**
+
+Imagine you have a curve on a graph, and you want to figure out how steep it is at a specific point. The steepness is called the **slope**, and in math, it's the derivative.
+
+The **numerical_derivative** function helps find this slope without needing fancy formulas. Here's how it works:
+1. Pick two points very close to the spot where you want the slope.
+2. Measure how much the curve goes up or down between those points.
+3. Divide the "up or down" distance by the "side-to-side" distance between the two points.
+
+This gives you an estimate of how steep the curve is at your chosen spot. The smaller the distance between the two points, the more accurate the slope.
+
+---
+
+### **As an expert:**
+
+The **numerical_derivative** function uses the **central difference formula** to approximate the derivative of a function \(f(x)\) at a given point \(x\). This method leverages the definition of the derivative:
+\[
+f'(x) = \lim_{h \to 0} \frac{f(x + h) - f(x - h)}{2h}
+\]
+
+Since taking \(h \to 0\) is impractical in numerical computing, a small, fixed value of \(h\) (e.g., \(10^{-5}\)) is used to approximate the derivative.
+
+---
+
+#### **How It Works:**
+1. **Central Difference Approximation:**
+   The derivative is estimated by sampling the function at two points:
+   - \(x + h\): Slightly to the right of \(x\).
+   - \(x - h\): Slightly to the left of \(x\).
+
+   The slope is then approximated by:
+   \[
+   f'(x) \approx \frac{f(x + h) - f(x - h)}{2h}
+   \]
+
+2. **Why Central Difference?**
+   - It is more accurate than forward or backward difference formulas because it uses points on both sides of \(x\), reducing error terms.
+   - The error in this method is \(O(h^2)\), meaning it decreases quadratically as \(h\) becomes smaller.
+
+3. **Choice of \(h\):**
+   - \(h\) should be small enough to provide accuracy but not so small that floating-point errors dominate.
+
+---
+
+#### **Advantages:**
+- Simple and efficient for functions where analytical derivatives are unavailable.
+- Symmetrical, reducing truncation errors compared to forward or backward differences.
+
+#### **Disadvantages:**
+- The choice of \(h\) can affect accuracy:
+  - Too large: The approximation deviates from the true derivative.
+  - Too small: Numerical precision errors can increase.
+
+---
+
+#### **Applications:**
+- Estimating derivatives in cases where only discrete data or computational functions are available.
+- Solving problems in physics, engineering, and optimization where derivatives are required but analytical expressions are impractical.
+
+In summary, the **numerical_derivative** function implements the central difference method, providing a practical and efficient way to approximate derivatives with controlled accuracy.

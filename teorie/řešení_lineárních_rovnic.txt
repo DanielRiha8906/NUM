@@ -1,0 +1,105 @@
+### **As if you know nothing about numerical computing:**
+
+Imagine you have a set of equations like this:
+1. \(2x + y = 5\)
+2. \(x - y = 1\)
+
+You want to find out what \(x\) and \(y\) are. The **Gaussian Elimination Method (GEM)** helps solve these equations step by step, kind of like organizing a messy room:
+
+1. First, focus on the first equation. Make sure it looks simple, so it’s easier to use (like keeping \(x\) alone).
+2. Next, use that equation to "clean up" the others—remove \(x\) from them.
+3. Keep going with the other variables (like \(y\)) until everything looks neat and orderly.
+4. Once it’s tidy, start solving backward. Use the simpler equations to figure out the variables one by one, like finding \(y\) first and then \(x\).
+
+This method works by breaking big, messy problems into smaller, manageable steps until the answer pops out.
+
+---
+
+### **As an expert:**
+
+The **Gaussian Elimination Method (GEM)** is a systematic algorithm to solve a system of linear equations represented as:
+\[
+A \mathbf{x} = \mathbf{b}
+\]
+where:
+- \(A\) is an \(n \times n\) coefficient matrix.
+- \(\mathbf{x}\) is the vector of unknowns.
+- \(\mathbf{b}\) is the right-hand-side vector.
+
+#### **Steps in GEM:**
+
+1. **Forward Elimination:**
+   - The goal is to transform the system into an upper triangular form:
+     \[
+     U \mathbf{x} = \mathbf{b}'
+     \]
+     where \(U\) is an upper triangular matrix.
+   - For each pivot row \(k\) (from 1 to \(n-1\)):
+     - Eliminate the \(k\)-th variable from all rows below it by subtracting a multiple of the \(k\)-th row.
+     - The multiple (scaling factor) for row \(i\) is:
+       \[
+       \text{factor} = \frac{A[i, k]}{A[k, k]}
+       \]
+
+2. **Back Substitution:**
+   - Once \(A\) is upper triangular, solve for the unknowns starting from the last row (\(n\)-th variable) and working upward:
+     \[
+     x_i = \frac{b_i' - \sum_{j=i+1}^{n} A[i, j] x_j}{A[i, i]}
+     \]
+
+#### **Key Operations in GEM:**
+- Division (to compute factors).
+- Row-wise subtraction (to eliminate variables).
+- Summation during back substitution.
+
+---
+
+### **Explanation of Your Function:**
+
+```R
+gauss_elimination <- function(A, b) {
+  n <- nrow(A)  # Number of equations (and variables)
+  
+  # Forward elimination
+  for (k in 1:(n - 1)) {
+    for (i in (k + 1):n) {
+      factor <- A[i, k] / A[k, k]  # Compute factor
+      A[i, k:n] <- A[i, k:n] - factor * A[k, k:n]  # Eliminate variable
+      b[i] <- b[i] - factor * b[k]  # Update RHS vector
+    }
+  }
+  
+  # Back substitution
+  x <- numeric(n)  # Initialize solution vector
+  for (i in n:1) {  # Work backward from the last equation
+    x[i] <- (b[i] - sum(A[i, (i + 1):n] * x[(i + 1):n])) / A[i, i]
+  }
+  
+  return(x)  # Return the solution vector
+}
+```
+
+#### **Inputs:**
+- `A`: The coefficient matrix of the system.
+- `b`: The right-hand-side vector.
+
+#### **Outputs:**
+- The solution vector \(\mathbf{x}\), which satisfies \(A \mathbf{x} = \mathbf{b}\).
+
+---
+
+### **Advantages:**
+- Systematic and general approach for any square system of linear equations.
+- Leads directly to a solution if the matrix is non-singular.
+
+### **Disadvantages:**
+- Computationally expensive (\(O(n^3)\)).
+- Numerical stability issues may arise, especially with poorly conditioned matrices (pivoting strategies can mitigate this).
+
+---
+
+### **Applications:**
+- Solving equations in physics, engineering, and economics.
+- Core step in algorithms for matrix inversion and determinant calculation.
+
+In summary, **Gaussian Elimination** provides a step-by-step approach to simplifying and solving systems of linear equations, converting them into a triangular form for efficient solution extraction.

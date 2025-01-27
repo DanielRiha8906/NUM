@@ -1,0 +1,14 @@
+lagrange_interpolation <- function(x, y, xi) {
+  n <- length(x)
+  result <- 0
+  for (i in 1:n) {
+    li <- 1
+    for (j in 1:n) {
+      if (i != j) {
+        li <- li * (xi - x[j]) / (x[i] - x[j])
+      }
+    }
+    result <- result + li * y[i]
+  }
+  return(result)
+}

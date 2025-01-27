@@ -1,0 +1,9 @@
+euler_method <- function(f, y0, t0, tn, h) {
+  t <- seq(t0, tn, by = h)
+  y <- numeric(length(t))
+  y[1] <- y0
+  for (i in 1:(length(t) - 1)) {
+    y[i + 1] <- y[i] + h * f(t[i], y[i])
+  }
+  return(data.frame(t = t, y = y))
+}
