@@ -1,30 +1,11 @@
-least_squares_manual <- function(x, y) {
-  # Create the design matrix
-  n <- length(x)
-  X <- cbind(1, x)  # Augmented matrix [1, x]
-  
-  # Compute the normal equation components
-  XtX <- t(X) %*% X
-  Xty <- t(X) %*% y
-  
-  # Solve XtX * beta = Xty using Gaussian elimination
-  beta <- gaussian_elimination(XtX, Xty)
-  
-  # Compute fitted values
-  fitted <- X %*% beta
-  mse <- mean((y - fitted)^2)
-  
-  return(list(coefficients = beta, mse = mse))
-}
-
-# Manual Gaussian elimination solver for Ax = b
+# Function to perform Gaussian Elimination for solving Ax = b
 gaussian_elimination <- function(A, b) {
   n <- nrow(A)
   augmented <- cbind(A, b)  # Augment matrix A with b
   
   # Forward elimination
   for (i in 1:n) {
-    # Pivoting (optional but improves stability)
+    # Pivoting to improve numerical stability
     max_row <- which.max(abs(augmented[i:n, i])) + (i - 1)
     if (max_row != i) {
       temp <- augmented[i, ]
@@ -32,10 +13,10 @@ gaussian_elimination <- function(A, b) {
       augmented[max_row, ] <- temp
     }
     
-    # Make diagonal element 1
+    # Normalize row by diagonal element
     augmented[i, ] <- augmented[i, ] / augmented[i, i]
     
-    # Eliminate column elements below the pivot
+    # Eliminate lower triangular elements
     for (j in (i + 1):n) {
       augmented[j, ] <- augmented[j, ] - augmented[j, i] * augmented[i, ]
     }
@@ -49,3 +30,104 @@ gaussian_elimination <- function(A, b) {
   
   return(x)
 }
+
+# Least Squares function using manually solved normal equations
+least_squares_linear <- function(x, a, y) {
+  # Construct design matrix X
+  X <- cbind(1, x, a, a^2)  # First column for intercept term
+  
+  # Compute normal equations XtX * beta = Xty
+  XtX <- t(X) %*% X
+  Xty <- t(X) %*% y
+
+  # Solve using Gaussian elimination instead of `solve()`
+  beta <- gaussian_elimination(XtX, Xty)
+
+  # Compute fitted values
+  fitted <- X %*% beta
+
+  # Compute Mean Squared Error (MSE)
+  mse <- mean((y - fitted)^2)
+
+  return(list(coefficients = beta, mse = mse))
+}
+
+# Example usage
+x <- c(1, 2, 3, 4, 5)
+a <- c(0.5, 1.0, 1.5, 2.0, 2.5)
+y <- c(2.1, 3.5, 5.7, 8.2, 10.8)
+
+result_linear <- least_squares_linear(x, a, y)
+print(result_linear$coefficients)  # Estimated coefficients
+print(result_linear$mse)  # Mean Squared Error
+
+
+
+Je tam i rovnou GEM s pivotaci na vyreseni A * x = b {kde A je matice, x je nejaky vektor}
+
+
+
+# Nonlinear least squares using gradient descent
+least_squares_nonlinear <- function(p, y, a_init, b_init, learning_rate = 0.01, tol = 1e-6, max_iter = 10000) {
+  a <- a_init
+  b <- b_init
+  n <- length(p)
+  
+  # Loss function (Mean Squared Error)
+  loss <- function(a, b) {
+    sum((y - (p + a * b + a^2 * b))^2) / n
+  }
+  
+  # Compute gradients manually
+  grad_a <- function(a, b) {
+    residual <- y - (p + a * b + a^2 * b)
+    -2 * sum(residual * (b + 2 * a * b))
+  }
+  
+  grad_b <- function(a, b) {
+    residual <- y - (p + a * b + a^2 * b)
+    -2 * sum(residual * (a + a^2))
+  }
+  
+  iter <- 0
+  prev_loss <- loss(a, b)
+  
+  repeat {
+    iter <- iter + 1
+    
+    # Compute gradients
+    da <- grad_a(a, b)
+    db <- grad_b(a, b)
+    
+    # Update parameters
+    a <- a - learning_rate * da
+    b <- b - learning_rate * db
+    
+    # Compute new loss
+    new_loss <- loss(a, b)
+    
+    # Check for convergence
+    if (abs(new_loss - prev_loss) < tol || iter >= max_iter) {
+      break
+    }
+    
+    prev_loss <- new_loss
+  }
+  
+  return(list(a = a, b = b, mse = new_loss, iterations = iter))
+}
+
+# Example usage
+p <- c(0.1, 0.2, 0.3, 0.4, 0.5)
+y <- c(2.1, 3.5, 5.7, 8.2, 10.8)
+
+# Initial guesses for a and b
+result_nonlinear <- least_squares_nonlinear(p, y, a_init = 0.5, b_init = 0.5)
+
+print(result_nonlinear$a)  # Estimated 'a'
+print(result_nonlinear$b)  # Estimated 'b'
+print(result_nonlinear$mse)  # Mean squared error
+print(result_nonlinear$iterations)  # Number of iterations taken
+
+
+Tady je to nechutny a nechci to vysvetlovat 
