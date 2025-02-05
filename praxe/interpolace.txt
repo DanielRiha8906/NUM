@@ -1,14 +1,36 @@
+# Function to perform Lagrange Interpolation
 lagrange_interpolation <- function(x, y, xi) {
-  n <- length(x)
-  result <- 0
+  n <- length(x)  # Number of known data points
+  result <- 0     # Initialize the result variable
+
+  # Loop over each data point to construct the Lagrange polynomial
   for (i in 1:n) {
-    li <- 1
+    li <- 1  # Initialize Lagrange basis polynomial L_i(x)
+    
+    # Compute L_i(x) as a product of terms
     for (j in 1:n) {
-      if (i != j) {
+      if (i != j) {  # Avoid division by itself
         li <- li * (xi - x[j]) / (x[i] - x[j])
       }
     }
+    
+    # Accumulate contribution from each Lagrange basis term
     result <- result + li * y[i]
   }
-  return(result)
+  
+  return(result)  # Return interpolated value at xi
 }
+
+# Example Usage: Interpolating at xi = 2.5 using given points
+x <- c(1, 2, 3, 4)  # Known x values
+y <- c(1, 4, 9, 16)  # Known y values (quadratic: y = x^2)
+xi <- 2.5  # Point where we want to interpolate
+
+# Compute interpolation
+interpolated_value <- lagrange_interpolation(x, y, xi)
+
+# Print the result
+print(paste("Interpolated value at x =", xi, ":", interpolated_value))
+
+# Compare with actual function value (since y = x^2, the exact value is 2.5^2 = 6.25)
+print(paste("Exact value at x =", xi, ":", xi^2))

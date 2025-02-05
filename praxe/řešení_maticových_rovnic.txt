@@ -1,19 +1,20 @@
 gauss_elimination <- function(A, b) {
-  n <- nrow(A)  # Number of rows/columns in A
+  n <- nrow(A)  # Number of rows in A (square matrix)
   
-  # Forward Elimination
+  # Forward Elimination with Partial Pivoting
   for (k in 1:(n - 1)) {
-    # Pivot for numerical stability (optional)
-    max_row <- which.max(abs(A[k:n, k])) + k - 1
+    # Pivot for numerical stability (swap rows if necessary)
+    max_row <- which.max(abs(A[k:n, k])) + (k - 1)
     if (max_row != k) {
-      A[c(k, max_row), ] <- A[c(max_row, k), ]  # Swap rows
-      b[c(k, max_row)] <- b[c(max_row, k)]      # Swap b values
+      A[c(k, max_row), ] <- A[c(max_row, k), ]  # Swap rows in A
+      b[c(k, max_row)] <- b[c(max_row, k)]      # Swap corresponding b values
     }
     
+    # Perform elimination
     for (i in (k + 1):n) {
-      factor <- A[i, k] / A[k, k]  # Calculate factor for row reduction
-      A[i, k:n] <- A[i, k:n] - factor * A[k, k:n]  # Eliminate variable
-      b[i] <- b[i] - factor * b[k]                 # Update RHS vector
+      factor <- A[i, k] / A[k, k]  # Compute multiplier
+      A[i, k:n] <- A[i, k:n] - factor * A[k, k:n]  # Row reduction in A
+      b[i] <- b[i] - factor * b[k]  # Update b vector
     }
   }
   
@@ -23,5 +24,30 @@ gauss_elimination <- function(A, b) {
     x[i] <- (b[i] - sum(A[i, (i + 1):n] * x[(i + 1):n])) / A[i, i]
   }
   
-  return(x)  # Return the solution vector
+  return(x)  # Return computed solution vector
 }
+
+
+les exmaples 
+
+
+# Define coefficient matrix A and right-hand side vector b
+A <- matrix(c(2, 3, -1, 
+              4, 1, 2, 
+              3, 2, 5), nrow = 3, byrow = TRUE)
+
+b <- c(5, 6, 7)  # Right-hand side vector
+
+# Preserve the original A for verification
+A_original <- A  
+
+# Solve the system using Gaussian Elimination
+solution <- gauss_elimination(A, b)
+
+# Print solution
+print("Solution (x, y, z):")
+print(solution)
+
+# Verify by computing A * x (using original A)
+print("Verification (A * x should equal b):")
+print(A_original %*% solution)

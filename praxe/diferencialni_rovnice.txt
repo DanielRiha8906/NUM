@@ -1,9 +1,35 @@
+# Euler's method for solving first-order ODEs numerically
 euler_method <- function(f, y0, t0, tn, h) {
+  # Create a sequence of time points from t0 to tn with step size h
   t <- seq(t0, tn, by = h)
+  
+  # Initialize the solution array
   y <- numeric(length(t))
-  y[1] <- y0
+  y[1] <- y0  # Set initial condition
+  
+  # Apply Euler's method iteratively
   for (i in 1:(length(t) - 1)) {
-    y[i + 1] <- y[i] + h * f(t[i], y[i])
+    y[i + 1] <- y[i] + h * f(t[i], y[i])  # Euler update rule
   }
+  
+  # Return results as a dataframe
   return(data.frame(t = t, y = y))
 }
+
+# Example Usage: Solving dy/dt = -2y with y(0) = 1 from t = 0 to t = 5
+f <- function(t, y) -2 * y  # Define the function dy/dt = -2y
+
+y0 <- 1   # Initial condition y(0) = 1
+t0 <- 0   # Start time
+tn <- 5   # End time
+h <- 0.1  # Step size
+
+# Solve using Euler's method
+result <- euler_method(f, y0, t0, tn, h)
+
+# Print results
+print(head(result))  # Show first few computed values
+
+# Plot the numerical solution
+plot(result$t, result$y, type = "l", col = "blue", lwd = 2,
+     xlab = "t", ylab = "y", main = "Euler's Method Approximation")

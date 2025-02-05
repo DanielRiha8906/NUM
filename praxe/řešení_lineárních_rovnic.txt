@@ -1,17 +1,50 @@
 gauss_elimination <- function(A, b) {
   n <- nrow(A)
-  # Forward elimination
+  
+  # Forward elimination with partial pivoting
   for (k in 1:(n - 1)) {
+    # Partial Pivoting: Swap rows if needed
+    max_row <- which.max(abs(A[k:n, k])) + (k - 1)
+    if (max_row != k) {
+      A[c(k, max_row), ] <- A[c(max_row, k), ]
+      b[c(k, max_row)] <- b[c(max_row, k)]
+    }
+    
+    # Eliminate column below pivot
     for (i in (k + 1):n) {
       factor <- A[i, k] / A[k, k]
       A[i, k:n] <- A[i, k:n] - factor * A[k, k:n]
       b[i] <- b[i] - factor * b[k]
     }
   }
+  
   # Back substitution
   x <- numeric(n)
   for (i in n:1) {
     x[i] <- (b[i] - sum(A[i, (i + 1):n] * x[(i + 1):n])) / A[i, i]
   }
+  
   return(x)
 }
+
+
+
+Les examples 
+
+
+# Define coefficient matrix A and right-hand side vector b
+A <- matrix(c(2, 3, -1, 
+              4, 1, 2, 
+              3, 2, 5), nrow = 3, byrow = TRUE)
+
+b <- c(5, 6, 7)  # Right-hand side vector
+
+# Solve the system using Gaussian Elimination
+solution <- gauss_elimination(A, b)
+
+# Print solution
+print(solution)
+
+# Verify by computing A * x
+print("Verification (A * x):")
+print(A %*% solution)

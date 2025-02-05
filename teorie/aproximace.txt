@@ -1,56 +1,184 @@
-### **As if you know nothing about numerical computing:**
+### **Explanation for a High School Graduate**
 
-Imagine you're trying to fit a straight line through a bunch of dots on a graph. These dots might represent data you’ve collected, like how fast a car is moving at different times.
+#### **Linear Least Squares (OLS) - Using Gaussian Elimination**
+Linear least squares is used when the equation can be rewritten as a linear combination of unknown parameters. The goal is to find the best values for these parameters so that the function closely matches the given data.
 
-The **least squares method** is like drawing a line that gets as close as possible to all those dots. Instead of eyeballing it, the method uses a rule: 
+1. **Setting Up the Problem**  
+   We have an equation of the form:
 
-1. For each dot, it measures how far it is from the line (up or down).
-2. It squares those distances (to make sure negative distances don’t cancel positive ones).
-3. Then, it adds up all those squared distances to get a total "error."
-4. The method finds the line where this total error is as small as possible.
+   \[
+   y = x + a b + a^2 b
+   \]
 
-In short, it’s a way to draw the "best" line through the dots by minimizing the total error.
+   If **one of the variables (like \( a \)) is known**, we can treat the terms involving it (\( a \) and \( a^2 \)) as separate variables and rewrite the equation in matrix form:
+
+   \[
+   y = \beta_0 + \beta_1 x + \beta_2 a + \beta_3 a^2
+   \]
+
+   where \( \beta_0, \beta_1, \beta_2, \beta_3 \) are unknowns we want to estimate.
+
+2. **Building the Design Matrix**  
+   We organize the known data into a matrix:
+
+   \[
+   X =
+   \begin{bmatrix}
+   1 & x_1 & a_1 & a_1^2 \\
+   1 & x_2 & a_2 & a_2^2 \\
+   \vdots & \vdots & \vdots & \vdots \\
+   1 & x_n & a_n & a_n^2
+   \end{bmatrix}
+   \]
+
+   and a vector for \( y \):
+
+   \[
+   Y =
+   \begin{bmatrix}
+   y_1 \\
+   y_2 \\
+   \vdots \\
+   y_n
+   \end{bmatrix}
+   \]
+
+   The equation we need to solve is:
+
+   \[
+   X^T X \beta = X^T Y
+   \]
+
+3. **Solving for Coefficients Using Gaussian Elimination**  
+   Since we can’t use built-in functions like `solve()`, we solve this system using **Gaussian elimination**, which consists of:
+   - **Forward elimination**: Transform the system into an upper triangular form.
+   - **Back substitution**: Solve for the unknowns starting from the last row.
+
+4. **Computing the Fit and Error**  
+   After finding the coefficients, we compute the predicted values \( \hat{y} \) and measure the error using Mean Squared Error (MSE):
+
+   \[
+   MSE = \frac{1}{n} \sum (y_i - \hat{y}_i)^2
+   \]
+
+   This tells us how well our model fits the data.
 
 ---
 
-### **As an expert:**
+#### **Nonlinear Least Squares - Using Gradient Descent**
+If **both \( a \) and \( b \) are unknown**, the equation is **nonlinear**, meaning we cannot solve it using normal equations. Instead, we must find \( a \) and \( b \) by iteratively improving guesses.
 
-The **least squares method** is a mathematical optimization technique used to approximate the solution of overdetermined systems (where there are more equations than unknowns), typically in the context of data fitting.
+1. **Understanding the Error Function**  
+   We define an error function that measures how far our equation is from the actual data:
 
-#### Core Idea:
-The method minimizes the **sum of squared residuals** between observed values (\(y_i\)) and values predicted by the model (\(\hat{y}_i\)).
+   \[
+   S(a, b) = \sum (y_i - (x_i + a b + a^2 b))^2
+   \]
 
-#### Process:
-1. **Model Setup:**
-   - Assume a model: \( y = X\beta + \epsilon \), where:
-     - \(y\): Vector of observed values.
-     - \(X\): Design matrix containing predictor variables.
-     - \(\beta\): Vector of coefficients (parameters) to estimate.
-     - \(\epsilon\): Vector of errors (residuals).
+   Our goal is to **minimize this function** by adjusting \( a \) and \( b \).
 
-2. **Objective:**
-   - Minimize the residual sum of squares (RSS): 
+2. **Using Gradient Descent**  
+   - Compute the partial derivatives of \( S(a, b) \) with respect to \( a \) and \( b \).
+   - Update \( a \) and \( b \) in the opposite direction of the gradient:
+
      \[
-     RSS = \sum_{i=1}^n (y_i - \hat{y}_i)^2 = \|y - X\beta\|^2
+     a = a - \alpha \frac{\partial S}{\partial a}, \quad
+     b = b - \alpha \frac{\partial S}{\partial b}
      \]
 
-3. **Solution:**
-   - Using calculus, the solution is derived by setting the derivative of RSS with respect to \(\beta\) to zero, leading to the **normal equations**:
-     \[
-     X^T X \beta = X^T y
-     \]
-   - The optimal \(\beta\) is given by:
-     \[
-     \beta = (X^T X)^{-1} X^T y
-     \]
+   where \( \alpha \) (learning rate) controls the step size.
 
-#### Key Properties:
-- Assumes the errors \(\epsilon\) are normally distributed with constant variance (\( \sigma^2 \)).
-- Efficient and widely used for linear regression and polynomial fitting.
+3. **Stopping Conditions**  
+   - If updates become very small, meaning changes in \( a \) and \( b \) are insignificant.
+   - If we reach a set number of iterations.
 
-#### Applications:
-- Data fitting (e.g., finding trends in experimental data).
-- Predictive modeling.
-- Calibration of instruments.
+4. **Final Values**  
+   After many iterations, we get the best estimates for \( a \) and \( b \) and can compute the model's error.
 
-In summary, the least squares method transforms a complex fitting problem into a solvable linear algebra problem, ensuring an optimal fit by minimizing the squared differences between observed and predicted values.
+---
+
+---
+
+### **Explanation for Someone Familiar with Numerical Methods**
+
+#### **Linear Least Squares - Solving Normal Equations Without Built-In Solvers**
+The equation:
+
+\[
+y = x + a b + a^2 b
+\]
+
+is **linear in parameters** if \( a \) is known. The least squares estimate is found by solving:
+
+\[
+X^T X \beta = X^T Y
+\]
+
+where:
+- \( X \) is the design matrix including the known terms.
+- \( Y \) is the observed response vector.
+
+##### **Computational Approach**
+1. **Compute \( X^T X \) and \( X^T Y \)** explicitly.
+2. **Solve the system using Gaussian elimination**:
+   - **Pivoting**: Ensure numerical stability by swapping rows.
+   - **Forward elimination**: Convert \( X^T X \) into an upper triangular form.
+   - **Back substitution**: Solve for \( \beta \).
+
+##### **Complexity Considerations**
+- \( X^T X \) is symmetric and positive semi-definite.
+- Gaussian elimination has a complexity of **\( O(n^3) \)** but is stable when pivoting is applied.
+
+---
+
+#### **Nonlinear Least Squares - Gradient Descent Approach**
+Since both \( a \) and \( b \) are unknown, the problem is **nonlinear in parameters**. We define the objective function:
+
+\[
+S(a, b) = \sum (y_i - (x_i + a b + a^2 b))^2
+\]
+
+and minimize it iteratively.
+
+##### **Gradient Computation**
+The gradients are:
+
+\[
+\frac{\partial S}{\partial a} = -2 \sum (y_i - (x_i + a b + a^2 b)) (b + 2 a b)
+\]
+
+\[
+\frac{\partial S}{\partial b} = -2 \sum (y_i - (x_i + a b + a^2 b)) (a + a^2)
+\]
+
+##### **Optimization Strategy**
+- Use **gradient descent** with a fixed learning rate \( \alpha \).
+- Update parameters:
+
+  \[
+  a = a - \alpha \frac{\partial S}{\partial a}, \quad
+  b = b - \alpha \frac{\partial S}{\partial b}
+  \]
+
+- Stop when the gradient norm is below a tolerance level or after a maximum number of iterations.
+
+##### **Stability Considerations**
+- **Step size selection**: A too-large \( \alpha \) may cause divergence, while a too-small \( \alpha \) slows convergence.
+- **Hessian-based approaches**: More advanced methods (e.g., Levenberg-Marquardt) could be used for better convergence.
+
+##### **Complexity Analysis**
+- Each iteration requires \( O(n) \) operations.
+- Convergence depends on step size and initial values.
+
+---
+
+### **Final Thoughts**
+| Method | Type | Solution Approach | Complexity |
+|--------|------|------------------|------------|
+| **OLS (Linear Least Squares)** | Linear in parameters | Gaussian elimination on \( X^T X \beta = X^T Y \) | \( O(n^3) \) |
+| **Nonlinear Least Squares** | Nonlinear in parameters | Gradient descent on sum of squared residuals | \( O(n) \) per iteration |
+
+
+Jsou tam napsany vsechny veci jako to Latexu ... good luck to us :]
+
+

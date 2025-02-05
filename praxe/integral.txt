@@ -1,5 +1,24 @@
+midpointrule <- function(f, dolni_hranice, vrchni_hranice, step_size = 1e6) {
+    # Step size (h) - determines the width of each interval
+    h <- (vrchni_hranice - dolni_hranice) / step_size  
 
-midpointrule <- function(f,a,b, n=1e6){
-    h <- (b-a)/n
-    return(h*sum(f(a+h*(1:n)-h/2)))
+    # Compute the sum of function values at midpoints
+    midpoints <- dolni_hranice + h * (1:step_size) - h / 2
+    integral_approx <- h * sum(f(midpoints))  # Midpoint rule formula
+
+    return(integral_approx)
 }
+
+# Example Usage: Integrating f(x) = x^2 from 0 to 1
+f <- function(x) x^2  # Define function f(x) = x^2
+dolni_hranice <- 0  # Lower limit of integration
+vrchni_hranice <- 1  # Upper limit of integration
+
+# Compute the integral using Midpoint Rule
+integral_result <- midpointrule(f, dolni_hranice, vrchni_hranice)
+
+# Print result
+print(integral_result)
+
+# Compare with exact integral of x^2 from 0 to 1: (1/3)
+print(paste("Exact integral:", 1/3))

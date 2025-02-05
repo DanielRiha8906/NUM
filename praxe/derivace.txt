@@ -1,3 +1,20 @@
+# Function to compute numerical derivative using the central difference method
 numerical_derivative <- function(f, x, h = 1e-5) {
-  (f(x + h) - f(x - h)) / (2 * h)
+  # Compute the central difference approximation of the derivative
+  derivative_approx <- (f(x + h) - f(x - h)) / (2 * h)
+  
+  return(derivative_approx)
 }
+
+# Example Usage: Compute the derivative of f(x) = x^2 at x = 2
+f <- function(x) x^2  # Define function f(x) = x^2
+x_value <- 2  # Point where we compute the derivative
+
+# Compute numerical derivative
+derivative_result <- numerical_derivative(f, x_value)
+
+# Print result
+print(paste("Numerical derivative at x =", x_value, ":", derivative_result))
+
+# Compare with exact derivative: d/dx (x^2) = 2x, so at x = 2, it should be 4
+print(paste("Exact derivative at x =", x_value, ":", 2 * x_value))
