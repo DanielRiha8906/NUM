@@ -1,184 +1,157 @@
-### **Explanation for a High School Graduate**
+Explanation for a High School Graduate
 
-#### **Linear Least Squares (OLS) - Using Gaussian Elimination**
+Linear Least Squares (OLS) - Using Gaussian Elimination
+
 Linear least squares is used when the equation can be rewritten as a linear combination of unknown parameters. The goal is to find the best values for these parameters so that the function closely matches the given data.
 
-1. **Setting Up the Problem**  
-   We have an equation of the form:
+Setting Up the ProblemWe have an equation of the form:
 
-   \[
-   y = x + a b + a^2 b
-   \]
+y = x + a b + a^2 b
 
-   If **one of the variables (like \( a \)) is known**, we can treat the terms involving it (\( a \) and \( a^2 \)) as separate variables and rewrite the equation in matrix form:
+If one of the variables (like a) is known, we can treat the terms involving it (a and a^2) as separate variables and rewrite the equation in matrix form:
 
-   \[
-   y = \beta_0 + \beta_1 x + \beta_2 a + \beta_3 a^2
-   \]
+y = β_0 + β_1 x + β_2 a + β_3 a^2
 
-   where \( \beta_0, \beta_1, \beta_2, \beta_3 \) are unknowns we want to estimate.
+where β_0, β_1, β_2, β_3 are unknowns we want to estimate.
 
-2. **Building the Design Matrix**  
-   We organize the known data into a matrix:
+Building the Design MatrixWe organize the known data into a matrix:
 
-   \[
-   X =
-   \begin{bmatrix}
-   1 & x_1 & a_1 & a_1^2 \\
-   1 & x_2 & a_2 & a_2^2 \\
-   \vdots & \vdots & \vdots & \vdots \\
-   1 & x_n & a_n & a_n^2
-   \end{bmatrix}
-   \]
+X =[ 1  x_1  a_1  a_1^2 ][ 1  x_2  a_2  a_2^2 ]...[ 1  x_n  a_n  a_n^2 ]
 
-   and a vector for \( y \):
+and a vector for y:
 
-   \[
-   Y =
-   \begin{bmatrix}
-   y_1 \\
-   y_2 \\
-   \vdots \\
-   y_n
-   \end{bmatrix}
-   \]
+Y =[ y_1 ][ y_2 ]...[ y_n ]
 
-   The equation we need to solve is:
+The equation we need to solve is:
 
-   \[
-   X^T X \beta = X^T Y
-   \]
+X^T X β = X^T Y
 
-3. **Solving for Coefficients Using Gaussian Elimination**  
-   Since we can’t use built-in functions like `solve()`, we solve this system using **Gaussian elimination**, which consists of:
-   - **Forward elimination**: Transform the system into an upper triangular form.
-   - **Back substitution**: Solve for the unknowns starting from the last row.
+Solving for Coefficients Using Gaussian Elimination
 
-4. **Computing the Fit and Error**  
-   After finding the coefficients, we compute the predicted values \( \hat{y} \) and measure the error using Mean Squared Error (MSE):
+Forward elimination: Transform the system into an upper triangular form.
 
-   \[
-   MSE = \frac{1}{n} \sum (y_i - \hat{y}_i)^2
-   \]
+Back substitution: Solve for the unknowns starting from the last row.
 
-   This tells us how well our model fits the data.
+Computing the Fit and ErrorAfter finding the coefficients, we compute the predicted values and measure the error using Mean Squared Error (MSE):
 
----
+MSE = (1/n) Σ (y_i - ŷ_i)^2
 
-#### **Nonlinear Least Squares - Using Gradient Descent**
-If **both \( a \) and \( b \) are unknown**, the equation is **nonlinear**, meaning we cannot solve it using normal equations. Instead, we must find \( a \) and \( b \) by iteratively improving guesses.
+This tells us how well our model fits the data.
 
-1. **Understanding the Error Function**  
-   We define an error function that measures how far our equation is from the actual data:
+Nonlinear Least Squares - Using Gradient Descent
 
-   \[
-   S(a, b) = \sum (y_i - (x_i + a b + a^2 b))^2
-   \]
+If both a and b are unknown, the equation is nonlinear, meaning we must iteratively improve guesses.
 
-   Our goal is to **minimize this function** by adjusting \( a \) and \( b \).
+Understanding the Error FunctionWe define an error function that measures how far our equation is from the actual data:
 
-2. **Using Gradient Descent**  
-   - Compute the partial derivatives of \( S(a, b) \) with respect to \( a \) and \( b \).
-   - Update \( a \) and \( b \) in the opposite direction of the gradient:
+S(a, b) = Σ (y_i - (x_i + a b + a^2 b))^2
 
-     \[
-     a = a - \alpha \frac{\partial S}{\partial a}, \quad
-     b = b - \alpha \frac{\partial S}{\partial b}
-     \]
+Using Gradient Descent
 
-   where \( \alpha \) (learning rate) controls the step size.
+Compute the partial derivatives of S(a, b) with respect to a and b.
 
-3. **Stopping Conditions**  
-   - If updates become very small, meaning changes in \( a \) and \( b \) are insignificant.
-   - If we reach a set number of iterations.
+Update a and b in the opposite direction of the gradient:
 
-4. **Final Values**  
-   After many iterations, we get the best estimates for \( a \) and \( b \) and can compute the model's error.
+a = a - α (∂S/∂a),   b = b - α (∂S/∂b)
 
----
+where α (learning rate) controls the step size.
 
----
+Stopping Conditions
 
-### **Explanation for Someone Familiar with Numerical Methods**
+If updates become very small.
 
-#### **Linear Least Squares - Solving Normal Equations Without Built-In Solvers**
+If we reach a set number of iterations.
+
+Final ValuesAfter many iterations, we get the best estimates for a and b.
+
+Explanation for Someone Familiar with Numerical Methods
+
+Linear Least Squares - Solving Normal Equations Without Built-In Solvers
+
 The equation:
 
-\[
 y = x + a b + a^2 b
-\]
 
-is **linear in parameters** if \( a \) is known. The least squares estimate is found by solving:
+is linear in parameters if a is known. The least squares estimate is found by solving:
 
-\[
-X^T X \beta = X^T Y
-\]
+X^T X β = X^T Y
 
-where:
-- \( X \) is the design matrix including the known terms.
-- \( Y \) is the observed response vector.
+Computational Approach
 
-##### **Computational Approach**
-1. **Compute \( X^T X \) and \( X^T Y \)** explicitly.
-2. **Solve the system using Gaussian elimination**:
-   - **Pivoting**: Ensure numerical stability by swapping rows.
-   - **Forward elimination**: Convert \( X^T X \) into an upper triangular form.
-   - **Back substitution**: Solve for \( \beta \).
+Compute X^T X and X^T Y explicitly.
 
-##### **Complexity Considerations**
-- \( X^T X \) is symmetric and positive semi-definite.
-- Gaussian elimination has a complexity of **\( O(n^3) \)** but is stable when pivoting is applied.
+Solve the system using Gaussian elimination:
 
----
+Pivoting: Ensure numerical stability by swapping rows.
 
-#### **Nonlinear Least Squares - Gradient Descent Approach**
-Since both \( a \) and \( b \) are unknown, the problem is **nonlinear in parameters**. We define the objective function:
+Forward elimination: Convert X^T X into an upper triangular form.
 
-\[
-S(a, b) = \sum (y_i - (x_i + a b + a^2 b))^2
-\]
+Back substitution: Solve for β.
 
-and minimize it iteratively.
+Complexity Considerations
 
-##### **Gradient Computation**
+X^T X is symmetric and positive semi-definite.
+
+Gaussian elimination has a complexity of O(n^3).
+
+Nonlinear Least Squares - Gradient Descent Approach
+
+Since both a and b are unknown, the problem is nonlinear in parameters. We define the objective function:
+
+S(a, b) = Σ (y_i - (x_i + a b + a^2 b))^2
+
+Gradient Computation
+
 The gradients are:
 
-\[
-\frac{\partial S}{\partial a} = -2 \sum (y_i - (x_i + a b + a^2 b)) (b + 2 a b)
-\]
+∂S/∂a = -2 Σ (y_i - (x_i + a b + a^2 b)) (b + 2 a b)
 
-\[
-\frac{\partial S}{\partial b} = -2 \sum (y_i - (x_i + a b + a^2 b)) (a + a^2)
-\]
+∂S/∂b = -2 Σ (y_i - (x_i + a b + a^2 b)) (a + a^2)
 
-##### **Optimization Strategy**
-- Use **gradient descent** with a fixed learning rate \( \alpha \).
-- Update parameters:
+Optimization Strategy
 
-  \[
-  a = a - \alpha \frac{\partial S}{\partial a}, \quad
-  b = b - \alpha \frac{\partial S}{\partial b}
-  \]
+Use gradient descent with a fixed learning rate α.
 
-- Stop when the gradient norm is below a tolerance level or after a maximum number of iterations.
+Update parameters:
 
-##### **Stability Considerations**
-- **Step size selection**: A too-large \( \alpha \) may cause divergence, while a too-small \( \alpha \) slows convergence.
-- **Hessian-based approaches**: More advanced methods (e.g., Levenberg-Marquardt) could be used for better convergence.
+a = a - α (∂S/∂a),   b = b - α (∂S/∂b)
 
-##### **Complexity Analysis**
-- Each iteration requires \( O(n) \) operations.
-- Convergence depends on step size and initial values.
+Stop when the gradient norm is below a tolerance level.
 
----
+Stability Considerations
 
-### **Final Thoughts**
-| Method | Type | Solution Approach | Complexity |
-|--------|------|------------------|------------|
-| **OLS (Linear Least Squares)** | Linear in parameters | Gaussian elimination on \( X^T X \beta = X^T Y \) | \( O(n^3) \) |
-| **Nonlinear Least Squares** | Nonlinear in parameters | Gradient descent on sum of squared residuals | \( O(n) \) per iteration |
+Step size selection: A too-large α may cause divergence.
 
+Hessian-based approaches: More advanced methods (e.g., Levenberg-Marquardt) could be used.
 
-Jsou tam napsany vsechny veci jako to Latexu ... good luck to us :]
+Complexity Analysis
 
+Each iteration requires O(n) operations.
 
+Convergence depends on step size and initial values.
+
+Final Thoughts
+
+Method
+
+Type
+
+Solution Approach
+
+Complexity
+
+OLS (Linear Least Squares)
+
+Linear in parameters
+
+Gaussian elimination on X^T X β = X^T Y
+
+O(n^3)
+
+Nonlinear Least Squares
+
+Nonlinear in parameters
+
+Gradient descent on sum of squared residuals
+
+O(n) per iteration
