@@ -1,0 +1,30 @@
+bisection_method <- function(f, a, b, tol = 1e-6, max_iter = 1000) {
+  # Check if initial interval is valid
+  if (f(a) * f(b) >= 0) {
+    stop("Function values at a and b must have opposite signs")
+  }
+  
+  iter <- 0
+  c <- (a + b) / 2 # Midpoint
+  
+  while ((b - a) / 2 > tol && iter < max_iter) {
+    c <- (a + b) / 2
+    
+    if (f(c) == 0) {
+      break # Exact root found
+    } else if (f(a) * f(c) < 0) {
+      b <- c # Root is in the left half
+    } else {
+      a <- c # Root is in the right half
+    }
+    
+    iter <- iter + 1
+  }
+  
+  return(list(root = c, iterations = iter, error = (b - a) / 2))
+}
+
+# Example usage:
+f <- function(x) x^3 - x - 2
+result <- bisection_method(f, 1, 2)
+print(result)
