@@ -1,237 +1,56 @@
 Explanation for a High School Graduate with Zero Knowledge About Numerical Methods
-Imagine you have a curved road, and you're trying to find the lowest point (like a valley) without using a map. You can’t see the whole road at once, so you start at two different points and move closer to the valley step by step.
 
-The Bisection Method works in a similar way to find a solution to an equation like 
-𝑓
-(
-𝑥
-)
-=
-0
-f(x)=0. It is used when we know that somewhere between two chosen values (say 
-𝑎
-a and 
-𝑏
-b), there is a point where the function crosses the x-axis.
+Imagine you have a curved road, and you're trying to find the lowest point (like a valley) without using a map. However, the lowest point is not necessarily where the function crosses the x-axis, so the concept is similar but not identical to root-finding. You can’t see the whole road at once, so you start at two different points and move closer to the valley step by step.
+
+The Bisection Method works in a similar way to find a solution to an equation like f(x) = 0. It is used when we know that somewhere between two chosen values (say a and b), there is a point where the function crosses the x-axis.
 
 Here’s how it works:
 
-Pick Two Points: Choose two numbers, 
-𝑎
-a and 
-𝑏
-b, where the function has opposite signs. That means the function is positive at one point and negative at the other. This ensures a crossing point in between.
+Pick Two Points: Choose two numbers, a and b, where the function has opposite signs. That means the function is positive at one point and negative at the other. This ensures a crossing point in between.
 
-Find the Middle Point: Calculate the middle point 
-𝑐
-=
-𝑎
-+
-𝑏
-2
-c= 
-2
-a+b
-​
- .
+Find the Middle Point: Calculate the middle point c = (a + b) / 2.
 
-Check the Function Value at 
-𝑐
-c:
+Check the Function Value at c:
 
-If 
-𝑓
-(
-𝑐
-)
-f(c) is exactly zero, we found the root.
-If 
-𝑓
-(
-𝑐
-)
-f(c) is not zero, we check whether 
-𝑓
-(
-𝑐
-)
-f(c) has the same sign as 
-𝑓
-(
-𝑎
-)
-f(a) or 
-𝑓
-(
-𝑏
-)
-f(b).
-If it has the same sign as 
-𝑓
-(
-𝑎
-)
-f(a), we move 
-𝑎
-a to 
-𝑐
-c.
-Otherwise, we move 
-𝑏
-b to 
-𝑐
-c.
-Repeat Until Close Enough: We keep repeating this process until 
-𝑎
-a and 
-𝑏
-b are so close together that the middle point is a good enough estimate of the root.
+If f(c) is exactly zero, we found the root.
 
-The Bisection Method is like dividing a search space in half repeatedly, just like when searching for a word in a dictionary by flipping to the middle page and deciding whether to go left or right.
+If f(c) is not zero, we check whether f(c) has the same sign as f(a) or f(b).
+
+If it has the same sign as f(a), we move a to c.
+
+Otherwise, we move b to c.
+
+Repeat Until Close Enough: We keep repeating this process until a and b are so close together that the middle point is a good enough estimate of the root.
+
+The Bisection Method is like dividing a search space in half repeatedly, just like when searching for a word in a dictionary by flipping to the middle page and deciding whether to go left or right. However, this method only works if the function is continuous within the chosen interval, ensuring that there is a valid crossing point.
 
 Explanation for an Expert in Numerical Methods
-The Bisection Method is a robust but slow root-finding technique that relies on the Intermediate Value Theorem (IVT). Given a continuous function 
-𝑓
-(
-𝑥
-)
-f(x) over an interval 
-[
-𝑎
-,
-𝑏
-]
-[a,b], if 
-𝑓
-(
-𝑎
-)
-⋅
-𝑓
-(
-𝑏
-)
-<
-0
-f(a)⋅f(b)<0, then there exists at least one root 
-𝜉
-ξ such that 
-𝑓
-(
-𝜉
-)
-=
-0
-f(ξ)=0.
+
+The Bisection Method is a robust but slow root-finding technique that relies on the Intermediate Value Theorem (IVT). Given a continuous function f(x) over an interval [a, b], if f(a) * f(b) < 0, then there exists at least one root ξ such that f(ξ) = 0.
 
 The algorithm follows an iterative approach:
 
-Initialization: Ensure 
-𝑓
-(
-𝑎
-)
-⋅
-𝑓
-(
-𝑏
-)
-<
-0
-f(a)⋅f(b)<0 to guarantee a root in 
-[
-𝑎
-,
-𝑏
-]
-[a,b].
+Initialization: Ensure f(a) * f(b) < 0 to guarantee a root in [a, b].
 
 Iteration:
 
-Compute the midpoint 
-𝑐
-=
-𝑎
-+
-𝑏
-2
-c= 
-2
-a+b
-​
- .
-Evaluate 
-𝑓
-(
-𝑐
-)
-f(c); if 
-𝑓
-(
-𝑐
-)
-=
-0
-f(c)=0, return 
-𝑐
-c as the exact root.
+Compute the midpoint c = (a + b) / 2.
+
+Evaluate f(c); if f(c) = 0, return c as the exact root.
+
 Otherwise, update the interval:
-If 
-𝑓
-(
-𝑎
-)
-⋅
-𝑓
-(
-𝑐
-)
-<
-0
-f(a)⋅f(c)<0, then the root lies in 
-[
-𝑎
-,
-𝑐
-]
-[a,c], so set 
-𝑏
-=
-𝑐
-b=c.
-Else, the root is in 
-[
-𝑐
-,
-𝑏
-]
-[c,b], so set 
-𝑎
-=
-𝑐
-a=c.
-Continue until 
-∣
-𝑏
-−
-𝑎
-∣
-/
-2
-<
-tol
-∣b−a∣/2<tol.
+
+If f(a) * f(c) < 0, then the root lies in [a, c], so set b = c.
+
+Else, the root is in [c, b], so set a = c.
+
+Continue until |b - a| / 2 < tol.
+
 Convergence Properties:
 
-The method has linear convergence with a rate of 
-𝑂
-(
-2
-−
-𝑛
-)
-O(2 
-−n
- ), meaning the error halves at each iteration.
-Despite its slow convergence compared to methods like Newton-Raphson or secant, it is guaranteed to converge for continuous functions given an initial bracketing interval.
+The method has linear convergence with a rate of O(2^(-n)), meaning the error halves at each iteration.
+
+Despite its slow convergence compared to methods like Newton-Raphson or secant, it is guaranteed to converge for continuous functions given an initial bracketing interval. In contrast, Newton-Raphson can fail if the derivative at the root is zero or if it starts far from the root, leading to divergence or oscillations.
+
 This method is particularly useful in scenarios where function derivatives are unavailable or unreliable, making it a fundamental tool in numerical analysis.
+

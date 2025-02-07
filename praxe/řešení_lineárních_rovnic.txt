@@ -1,32 +1,36 @@
 gauss_elimination <- function(A, b) {
   n <- nrow(A)
   
-  # Forward elimination with partial pivoting
+  # Forward elimination to convert A into an upper triangular matrix
   for (k in 1:(n - 1)) {
-    # Partial Pivoting: Swap rows if needed
+    
+    # Partial pivoting: swap rows to improve numerical stability
     max_row <- which.max(abs(A[k:n, k])) + (k - 1)
     if (max_row != k) {
-      A[c(k, max_row), ] <- A[c(max_row, k), ]
-      b[c(k, max_row)] <- b[c(max_row, k)]
+      A[c(k, max_row), ] <- A[c(max_row, k), ]  # Swap rows in A
+      b[c(k, max_row)] <- b[c(max_row, k)]      # Swap corresponding b values
     }
     
-    # Eliminate column below pivot
+    # Perform elimination to create zeros below the diagonal
     for (i in (k + 1):n) {
-      factor <- A[i, k] / A[k, k]
-      A[i, k:n] <- A[i, k:n] - factor * A[k, k:n]
-      b[i] <- b[i] - factor * b[k]
+      factor <- A[i, k] / A[k, k]  # Compute multiplier
+      A[i, k:n] <- A[i, k:n] - factor * A[k, k:n]  # Subtract multiple of pivot row
+      b[i] <- b[i] - factor * b[k]  # Adjust corresponding b values
     }
   }
   
-  # Back substitution
+  # Back substitution to solve for x in upper triangular system
   x <- numeric(n)
   for (i in n:1) {
-    x[i] <- (b[i] - sum(A[i, (i + 1):n] * x[(i + 1):n])) / A[i, i]
+    if (i < n) {
+      x[i] <- (b[i] - sum(A[i, (i + 1):n] * x[(i + 1):n])) / A[i, i]
+    } else {
+      x[i] <- b[i] / A[i, i]  # Direct solve for last variable
+    }
   }
   
   return(x)
 }
-
 
 
 Les examples 
